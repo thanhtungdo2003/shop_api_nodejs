@@ -9,6 +9,19 @@ export function getAll(req, res){
         return res.json(categorys);
     });
 }
+export function getByPage(req, res){
+    if (!req || !req.body){
+        return res.status(500).json({ error: "Lỗi ", details: "Không có tham số" });
+    }
+    const {page, row} = req.body;
+    Category.getByPage(page, row, (err, categorys)=>{
+        if (err) {
+            console.error("Lỗi:", err);
+            return res.status(500).json({ error: "Lỗi ", details: err.message });
+        }
+        return res.json(categorys);
+    });
+}
 export function create(req, res) {
     const data = req.body;
     // Kiểm tra category có tồn tại không
