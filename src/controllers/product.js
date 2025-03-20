@@ -36,26 +36,33 @@ export const addProduct = async (req, res) => {
     try {
         const product = JSON.parse(JSON.stringify(req.body));
         const productImage = req.files;
+
+        const productSelectCopy = {...product};
+
+        delete productSelectCopy.category_name;
+        delete productSelectCopy.category_slug;
+        delete productSelectCopy.create_at;
+        delete productSelectCopy.product_imgs;
+        console.log(productSelectCopy);
+
         // Kiểm tra dữ liệu đầu vào
-        if (!product.display_name || !product.price || !product.product_id || !product.category_id || !productImage) {
+        if (!productSelectCopy.display_name || !productSelectCopy.price || !productSelectCopy.product_id || !productSelectCopy.category_id || !productImage) {
             return res.status(400).json({ error: "Thiếu thông tin sản phẩm" });
         }
 
-        // Tạo product_id
-        product.product_id = generateProductId();
+        productSelectCopy.product_id = generateProductId();
 
-        // Thêm sản phẩm vào database
-        Product.create(product, (err, returnID) => {
+        Product.create(productSelectCopy, (err, returnID) => {
             if (err) {
                 console.error("Lỗi:", err);
                 return res.status(500).json({ error: "Lỗi khi thêm sản phẩm", details: err.message });
             }
-            saveFilesToMySQL(req.files, product.product_id);
+            saveFilesToMySQL(req.files, productSelectCopy.product_id);
 
             return res.json({
                 message: "Đã thêm sản phẩm",
                 product_id: returnID,
-                product_info: product
+                product_info: productSelectCopy
             });
             
         });
@@ -77,6 +84,33 @@ export const deleteProduct = (req, res) => {
     });
 
 };
-export const updateProduct = (req, res) => {
-    console.log('updateProduct')
+export const updateProduct = async (req, res) => {
+    try {
+        const product = JSON.parse(JSON.stringify(req.body));
+        const productImage = req.files;
+        // Kiểm tra dữ liệu đầu vào
+        console.log(productImage)
+        if (!product.display_name || !product.price || !product.product_id || !product.category_id || !productImage) {
+            return res.status(400).json({ error: "Thiếu thông tin sản phẩm" });
+        }
+
+        // Thêm sản phẩm vào database
+        Product.update(product, (err, returnID) => {
+            if (err) {
+                console.error("Lỗi:", err);
+                return res.status(500).json({ error: "Lỗi khi sửa sản phẩm", details: err.message });
+            }
+            saveFilesToMySQL(req.files, product.product_id);
+
+            return res.json({
+                message: "Đã update sản phẩm",
+                product_id: returnID,
+                product_info: product
+            });
+            
+        });
+    } catch (error) {
+        console.error("Lỗi updateProduct:", error);
+        res.status(500).json({ error: "Lỗi khi xử lý sản phẩm", details: error.message });
+    }
 };

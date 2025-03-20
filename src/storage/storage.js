@@ -47,7 +47,7 @@ export function saveFilesToMySQL(files, id) {
 
 export function getFile(req, res) {
     const { filename, dirpath } = req.params;
-    console.log(dirpath+" -> "+filename)
+    console.log(`[${Date.now().toLocaleString()}] `+ dirpath+" -> "+filename)
     const filePath = path.join("D:/shopmt/" + dirpath + "/", filename);
     if (!fs.existsSync(filePath)) {
         return res.status(404).json({ error: "File not found" });

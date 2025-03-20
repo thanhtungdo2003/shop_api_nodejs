@@ -38,8 +38,10 @@ class Product {
     });
   }
 
-  static update(id, display_name, price, callback) {
-    connection.query("UPDATE products SET display_name = ?, price = ? WHERE p_id = ?", [display_name, price, id], (err, result) => {
+  static update(product, callback) {
+    const {product_id, category_id, display_name, pramaters, description, price, inventory} = product;
+    connection.query("CALL sp_product_update(?, ?, ?, ?, ?, ?, ?)",
+       [product_id, category_id, display_name, pramaters, description, price, inventory], (err, result) => {
       if (err) return callback(err, null);
       callback(null, result.affectedRows);
     });

@@ -10,7 +10,7 @@ router.get(`/products/get-new/:row/:page`, getNews);
 router.post(`/products-get-by-params`, getProductByParams);
 router.get(`/product/get-imgs/:dirpath/:filename`, getFile);
 router.post(`/products-add`, uploadImgs("D:/shopmt/product_imgs"), addProduct);
-router.put(`/products`, updateProduct);
+router.post(`/product/update`, uploadImgs("D:/shopmt/product_imgs"), updateProduct);
 router.delete(`/products/:id`, deleteProduct);
 
 export default router;
