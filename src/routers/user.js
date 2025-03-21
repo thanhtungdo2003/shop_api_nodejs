@@ -1,6 +1,6 @@
 import express from 'express';
-import { login, auth, userRegister, logout } from '../controllers/user';
-import authMiddleware from '../authMiddleware';
+import { login, auth, userRegister, logout, getWithParams, update, addPerm } from '../controllers/user';
+import authMiddleware, { adminAuthMiddleware, userAuthMiddleware } from '../authMiddleware';
 
 const router = express.Router();
 
@@ -8,7 +8,13 @@ router.post(`/login`, login);
 
 router.post(`/register`, userRegister);
 
-router.post(`/auth`,authMiddleware, auth);
+router.post(`/get-by-params`, userAuthMiddleware, getWithParams);
+
+router.post(`/update`, userAuthMiddleware, update);
+
+router.post(`/add-perm`, adminAuthMiddleware, addPerm);
+
+router.post(`/auth`, authMiddleware, auth);
 
 router.post('/logout', logout)
 

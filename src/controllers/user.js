@@ -30,6 +30,36 @@ export function userRegister(req, res) {
         res.status(500).json({ error: "Lỗi khi khi đăng ký tài khoản", details: error.message });
     }
 }
+export function addPerm(req, res) {
+    User.addPerm(req.body, (err, result) => {
+        if (err) {
+            console.error("Lỗi:", err);
+            if (err.sqlState === "23000"){
+                return res.status(200).json({ message: "Người dùng này đã sở hữu quyền"});
+            }
+            return res.status(500).json({ error: "Lỗi ", details: err.message });
+        }
+        return res.json(result);
+    });
+}
+export function getWithParams(req, res) {
+    User.getWithParams(req.body, (err, result) => {
+        if (err) {
+            console.error("Lỗi:", err);
+            return res.status(500).json({ error: "Lỗi ", details: err.message });
+        }
+        return res.json(result);
+    });
+}
+export function update(req, res) {
+    User.update(req.body, (err, result) => {
+        if (err) {
+            console.error("Lỗi:", err);
+            return res.status(500).json({ error: "Lỗi ", details: err.message });
+        }
+        return res.json(result);
+    });
+}
 export const logout = (req, res) => {
     res.cookie("shopvntt-user-token", "NONE", {
         httpOnly: true, // Không cho JavaScript truy cập
@@ -43,17 +73,14 @@ export const auth = (req, res) => {
     if (!req.user) {
         return res.status(400).json({ error: "Thiếu thông tin đăng nhập" });
     }
-
     User.login(req.user, (err, result) => {
         if (err) {
             console.error("Lỗi:", err);
             return res.status(500).json({ error: "Lỗi", details: err.message });
         }
-
         if (!result || !result.token) {
             return res.status(401).json({ error: "Đăng nhập thất bại" });
         }
-
         res.cookie("shopvntt-user-token", result.token, {
             httpOnly: true, // Không cho JavaScript truy cập
             secure: process.env.NODE_ENV === "production", // Chỉ bật secure nếu chạy HTTPS
