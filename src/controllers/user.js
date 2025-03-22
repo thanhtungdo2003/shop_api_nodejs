@@ -30,6 +30,7 @@ export function userRegister(req, res) {
         res.status(500).json({ error: "Lỗi khi khi đăng ký tài khoản", details: error.message });
     }
 }
+
 export function addPerm(req, res) {
     User.addPerm(req.body, (err, result) => {
         if (err) {

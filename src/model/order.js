@@ -18,5 +18,12 @@ class Order {
             }
         )
     }
+    static getByParams(getModel, callback){
+        const {page, row, keyword, sort} = getModel;
+        connection.query("CALL sp_order_get_by_params(?, ?, ?, ?)", [row, page, keyword, sort], (err, result) =>{
+            if (err) return callback(err, null);
+            callback(null, result[0]);
+        })
+    }
 }
 export default Order;
