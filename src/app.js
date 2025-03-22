@@ -2,6 +2,7 @@ import express from "express";
 import productRouter from './routers/products';
 import userRouter from './routers/user';
 import categoryRouter from './routers/category';
+import orderRouter from "./routers/order"
 import cors from 'cors'
 import cookieParser from "cookie-parser";
 
@@ -19,5 +20,6 @@ app.use(cors({
 app.use('/api', productRouter);
 app.use('/api/user', userRouter);
 app.use('/api/category', categoryRouter);
+app.use('/api/order', orderRouter);
 
 export const viteNodeApp = app;
