@@ -13,7 +13,7 @@ app.use(cookieParser());
 //Sử dụng thư viện hỗ trợ chuyển dữ liệu thành dạng JSON
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:4000",
+    origin: ["http://localhost:4000","https://fmxqldkamf.ap.loclx.io/shopvntt_fe"],
     credentials: true
 }));
 //router
