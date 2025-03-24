@@ -13,6 +13,12 @@ class Category {
             callback(null, results[0]);
           });
     }
+    static delete(category_id, callback){
+        connection.query("DELETE FROM category WHERE category_id = ?",[category_id], (err, results) => {
+            if (err) return callback(err, null);
+            callback(null, results);
+          });
+    }
     static create(datas, callback) {
         insert("category", datas, (err, result)=>{
             if (err) return callback(err, null);

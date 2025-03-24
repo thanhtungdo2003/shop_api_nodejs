@@ -47,14 +47,20 @@ class Product {
         callback(null, result.affectedRows);
       });
   }
+  static delete(productId, callback) {
+    connection.query("DELETE FROM product_images WHERE product_id = ?",
+      [productId], (imgDeleteErr, result) => {
+        if (imgDeleteErr) return callback(imgDeleteErr, null);
+        connection.query("DELETE FROM product WHERE product_id = ?",
+          [productId], (err, result) => {
+            if (err) return callback(err, null);
+            callback(null, result.affectedRows);
+          });
+      });
+    
+  }
   static setStatus(productId, status, callback) {
     connection.query("UPDATE product SET status = ? WHERE product_id = ?", [status, productId], (err, result) => {
-      if (err) return callback(err, null);
-      callback(null, result.affectedRows);
-    });
-  }
-  static delete(id, callback) {
-    connection.query("DELETE FROM products WHERE p_id = ?", [id], (err, result) => {
       if (err) return callback(err, null);
       callback(null, result.affectedRows);
     });

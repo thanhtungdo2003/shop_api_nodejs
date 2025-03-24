@@ -74,15 +74,14 @@ export const addProduct = async (req, res) => {
 
 
 export const deleteProduct = (req, res) => {
-    const { id } = req.params;
-    Product.delete(id, (err, result) => {
+    const { productId } = req.body;
+    Product.delete(productId, (err, result) => {
         if (err) console.error("Lỗi:", err);
         res.status(200).json({
             "message": "xóa thành công",
             "excuse_result": result
         });
     });
-
 };
 
 

@@ -22,6 +22,19 @@ export function getByPage(req, res){
         return res.json(categorys);
     });
 }
+export function deleleById(req, res){
+    if (!req || !req.body){
+        return res.status(500).json({ error: "Lỗi ", details: "Không có tham số" });
+    }
+    const {categoryId} = req.body;
+    Category.delete(categoryId, (err, result)=>{
+        if (err) {
+            console.error("Lỗi:", err);
+            return res.status(500).json({ error: "Lỗi ", details: err.message });
+        }
+        return res.json(result);
+    });
+}
 export function create(req, res) {
     const data = req.body;
     // Kiểm tra category có tồn tại không

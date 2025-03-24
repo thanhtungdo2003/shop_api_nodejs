@@ -10,6 +10,7 @@ router.get(`/products/:id`, getProductById);
 router.get(`/products/get-new/:row/:page`, getNews);
 router.post(`/products-get-by-params`, productGetByParamsMiddleware, getProductByParams);
 router.post(`/products-set-status`, adminAuthMiddleware, setStatus);
+router.post(`/products-delete`, adminAuthMiddleware, deleteProduct);
 router.get(`/product/get-imgs/:dirpath/:filename`, getFile);
 router.post(`/products-add`, uploadImgs("D:/shopmt/product_imgs"), addProduct);
 router.post(`/product/update`, uploadImgs("D:/shopmt/product_imgs"), updateProduct);
