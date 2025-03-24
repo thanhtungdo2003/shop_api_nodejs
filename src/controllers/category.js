@@ -25,7 +25,7 @@ export function getByPage(req, res){
 export function create(req, res) {
     const data = req.body;
     // Kiểm tra category có tồn tại không
-    if (!data || !data.category_name || !data.category_id) {
+    if (!data || !data.category_name) {
         return res.status(400).json({ error: "Thiếu thông tin" });
     }
     data.category_id = randomUUID();

@@ -9,9 +9,9 @@ class Product {
       callback(null, results[0]);
     });
   }
-  
+
   static getNews(row, page, callback) {
-    connection.query("CALL sp_product_getnew(?, ?)",[row, page], (err, results) => {
+    connection.query("CALL sp_product_getnew(?, ?)", [row, page], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results[0]);
     });
@@ -23,8 +23,9 @@ class Product {
       callback(null, results[0]);
     });
   }
+
   static getByParams(inputs, callback) {
-    const {row, page, keyword, category_slug, sort, get_type} = inputs;
+    const { row, page, keyword, category_slug, sort, get_type } = inputs;
     connection.query("CALL sp_product_get_by_params(?, ?, ?, ?, ?, ?)", [row, page, keyword, category_slug, sort, get_type], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results[0]);
@@ -39,14 +40,19 @@ class Product {
   }
 
   static update(product, callback) {
-    const {product_id, category_id, display_name, pramaters, description, price, inventory} = product;
+    const { product_id, category_id, display_name, pramaters, description, price, inventory } = product;
     connection.query("CALL sp_product_update(?, ?, ?, ?, ?, ?, ?)",
-       [product_id, category_id, display_name, pramaters, description, price, inventory], (err, result) => {
+      [product_id, category_id, display_name, pramaters, description, price, inventory], (err, result) => {
+        if (err) return callback(err, null);
+        callback(null, result.affectedRows);
+      });
+  }
+  static setStatus(productId, status, callback) {
+    connection.query("UPDATE product SET status = ? WHERE product_id = ?", [status, productId], (err, result) => {
       if (err) return callback(err, null);
       callback(null, result.affectedRows);
     });
   }
-
   static delete(id, callback) {
     connection.query("DELETE FROM products WHERE p_id = ?", [id], (err, result) => {
       if (err) return callback(err, null);

@@ -33,6 +33,12 @@ class User {
             res.status(500).json({ error: "Lỗi khi lấy thông tin tài khoản", details: error.message });
         }
     }
+    static setStatus(userName, status, callback) {
+        connection.query("UPDATE user SET status = ? WHERE user_name = ?", [status, userName], (err, result) => {
+            if (err) return callback(err, null);
+            callback(null, result.affectedRows);
+        });
+    }
     static async update(userModel, callback) {
         try {
             const { user_name, email, phone, address, consumer_point, reputation_point, user_point, avata } = userModel;
@@ -71,13 +77,16 @@ class User {
             if (err) return callback(err, null);
 
             const user = results[0]?.[0]; // Lấy user từ kết quả query (tránh lỗi nếu kết quả là mảng lồng)
-            if (!user) return callback({ statusCode: 400, data: { error: "Tên đăng nhập không tồn tại" } });
+
+            if (user.status === 0) return callback({statusCode:400,message: "Tài khoản này đã bị cấm!"});
+
+            if (!user) return callback({ statusCode: 400, message: "Tên đăng nhập không tồn tại"});
 
             // So sánh mật khẩu với hash trong DB
             if (!isAutoAuth) {
                 const isMatch = await bcrypt.compare(password, user.hass_pass);
                 if (!isMatch) {
-                    return callback({ statusCode: 400, data: { error: "Mật khẩu không chính xác" } });
+                    return callback({ statusCode: 400, message: "Mật khẩu không chính xác" });
                 }
             }
 

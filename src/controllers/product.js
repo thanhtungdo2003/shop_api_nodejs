@@ -84,6 +84,19 @@ export const deleteProduct = (req, res) => {
     });
 
 };
+
+
+export const setStatus = (req, res) => {
+    const { productId, status } = req.body;
+    Product.setStatus(productId, status, (err, result) => {
+        if (err) console.error("Lỗi:", err);
+        res.status(200).json({
+            "message": "Cập nhật thành công",
+            "excuse_result": result
+        });
+    });
+
+};
 export const updateProduct = async (req, res) => {
     try {
         const product = JSON.parse(JSON.stringify(req.body));

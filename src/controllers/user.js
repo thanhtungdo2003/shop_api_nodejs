@@ -4,8 +4,9 @@ import User from '../model/user';
 export const login = (req, res) => {
     User.login(req.body, (err, result) => {
         if (err) {
+            console.log("[JOIN] - "+req.body.userName)
             console.error("Lỗi:", err);
-            return res.status(500).json({ error: "Lỗi ", details: err.message });
+            return res.status(400).json({message: err.message});
         }
         res.cookie("shopvntt-user-token", result.token, {
             httpOnly: true, // Không cho JavaScript truy cập
@@ -31,12 +32,23 @@ export function userRegister(req, res) {
     }
 }
 
+export const setStatus = (req, res) => {
+    const { user_name, status } = req.body;
+    User.setStatus(user_name, status, (err, result) => {
+        if (err) console.error("Lỗi:", err);
+        res.status(200).json({
+            "message": "Cập nhật thành công",
+            "excuse_result": result
+        });
+    });
+
+};
 export function addPerm(req, res) {
     User.addPerm(req.body, (err, result) => {
         if (err) {
             console.error("Lỗi:", err);
-            if (err.sqlState === "23000"){
-                return res.status(200).json({ message: "Người dùng này đã sở hữu quyền"});
+            if (err.sqlState === "23000") {
+                return res.status(200).json({ message: "Người dùng này đã sở hữu quyền" });
             }
             return res.status(500).json({ error: "Lỗi ", details: err.message });
         }
