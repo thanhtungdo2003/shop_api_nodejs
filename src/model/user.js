@@ -77,7 +77,7 @@ class User {
             if (err) return callback(err, null);
 
             const user = results[0]?.[0]; // Lấy user từ kết quả query (tránh lỗi nếu kết quả là mảng lồng)
-
+            if (!user) return callback({statusCode: 404, message:"tài khoản không tồn tại!"});
             if (user.status === 0) return callback({statusCode:400,message: "Tài khoản này đã bị cấm!"});
 
             if (!user) return callback({ statusCode: 400, message: "Tên đăng nhập không tồn tại"});
