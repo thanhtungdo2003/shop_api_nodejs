@@ -39,3 +39,29 @@ export const getAmountOfProductSaleByRangeOfTime = (req, res) => {
     res.json(result);
 });
 }
+
+export const getTopCateByRangeOfTime = (req, res) => {
+    const { start, end, rows, sortType } = req.body;
+    if (!start || !end || !sortType || !rows) {
+        return res.status(400).json("Thiếu tham số");
+    }
+    Stats.getTopCateByRangeOfTime(start, end, rows, sortType, (err, result) => {
+        if (err) {
+            return res.status(400).json("Lỗi khi thống kê: " + err);
+        }
+        res.json(result);
+    });
+}
+
+export const getOrderByRangeOfTime = (req, res) => {
+    const { start, end } = req.body;
+    if (!start || !end) {
+        return res.status(400).json("Thiếu tham số");
+    }
+    Stats.getOrderByRangeOfTime(start, end, (err, result) => {
+    if (err) {
+        return res.status(400).json("Lỗi khi thống kê: " + err);
+    }
+    res.json(result);
+});
+}

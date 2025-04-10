@@ -11,13 +11,11 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); 
-//Sử dụng thư viện hỗ trợ chuyển dữ liệu thành dạng JSON
 app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:4000","https://fmxqldkamf.ap.loclx.io/shopvntt_fe"],
     credentials: true
 }));
-//router
 app.use('/api', productRouter);
 app.use('/api/user', userRouter);
 app.use('/api/stats', statsRouter);

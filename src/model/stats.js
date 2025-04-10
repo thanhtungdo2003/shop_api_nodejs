@@ -22,6 +22,24 @@ class Stats {
             if (err) {
                 return callback("Lỗi khi thống kê: " + err, null);
             }
+            console.log(start);
+            console.log(end);
+            callback(null, result[0]);
+        });
+    }
+    static getOrderByRangeOfTime(start, end, callback) {
+        connection.query("CALL GetOrdersByDateRange(?, ?)", [start, end], (err, result) => {
+            if (err) {
+                return callback("Lỗi khi thống kê: " + err, null);
+            }
+            callback(null, result[0]);
+        });
+    }
+    static getTopCateByRangeOfTime(start, end, rows, sortType, callback) {
+        connection.query("CALL sp_stats_get_top_category_by_timerange(?, ?, ?, ?)", [start, end, rows, sortType], (err, result) => {
+            if (err) {
+                return callback("Lỗi khi thống kê: " + err, null);
+            }
             callback(null, result[0]);
         });
     }
